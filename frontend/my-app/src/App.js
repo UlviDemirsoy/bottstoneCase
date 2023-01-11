@@ -1,22 +1,15 @@
 import './App.css';
-import React, {useState} from 'react';
+import React, {useState, Component} from 'react';
 import DatePicker from 'react-datepicker';
 import Dropdown from 'react-dropdown';
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-dropdown/style.css';
-import Paper from '@mui/material/Paper';
-import {
-  Chart,
-  BarSeries,
-  Title,
-  ArgumentAxis,
-  ValueAxis,
-} from '@devexpress/dx-react-chart-material-ui';
-import { Animation } from '@devexpress/dx-react-chart';
+import { Chart, Series } from 'devextreme-react/chart'
 
 const options = [
   'day', 'week', 'month'
 ];
+const options2= { fillColor: '#FFFFFF', strokeColor: '#0000FF' };
 
 function formatDate(date) {
   var d = new Date(date),
@@ -34,7 +27,7 @@ function formatDate(date) {
 
 
 function App() {
-
+  
   const [selectedDate, setSelectedDate] = useState(new Date("2023-01-01"));
   const [selectedDate2, setSelectedDate2] = useState(new Date("2023-04-04"));
   const [selectedDropDown, setselectedDropDown] = useState(options[0]);
@@ -45,9 +38,12 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState('');
 
+  var obj = data;
+  var result2 = Object.entries(obj);
+
   const handleClick = async () => {
     setIsLoading(true);
-
+    console.log(result2)
     try {
       console.log(selectedDropDown['value']);
       var d1 = formatDate(selectedDate);
@@ -90,21 +86,15 @@ function App() {
       </header>
       <div>
         
-      <Paper>
-        <Chart
-          data={data}
-        >
-          <ArgumentAxis />
-          <ValueAxis />
-
-          <BarSeries
-            valueField="resourcesInUse"
-            argumentField="dateinfo"
-          />
-          <Title text="Resources" />
-          <Animation />
-        </Chart>
-      </Paper>
+      <Chart id="chart" dataSource={data}>
+        <Series
+          valueField="resourcesInUse"
+          argumentField="dateinfo"
+          name="Resources"
+          type="bar"
+          color="#ffaa66" />
+      </Chart>
+    
       <Dropdown id='dropdown' options={options} value={selectedDropDown} onChange={selectedDropDown => setselectedDropDown(selectedDropDown) } />
 
         <DatePicker className='datepicker' id='dp1' selected={selectedDate}
